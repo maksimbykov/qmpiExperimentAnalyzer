@@ -69,11 +69,11 @@ MainWindow::~MainWindow()
  * */
 void MainWindow::openFile()
 {
-    //QString fileName = QFileDialog::getOpenFileName( this, tr("Open File"), "c:\\", tr("Files (*.xml)") );
+    QString fileName = QFileDialog::getOpenFileName( this, tr("Open File"), "", tr("Files (*.xml)") );
 
-    //if ( !fileName.isNull() )
+    if ( !fileName.isNull() )
     {
-        if ( 0 == readInputFile(QString("res.xml")) )
+        if ( 0 == readInputFile(fileName))//QString("res.xml")) )
         {
             for (int i=0; i<m_plots.size(); i++)
             {

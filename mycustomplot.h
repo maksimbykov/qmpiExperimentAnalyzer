@@ -1,7 +1,7 @@
 #ifndef MYCUSTOMPLOT_H
 #define MYCUSTOMPLOT_H
 
-#include "C:\Programs\qt\QCustomPlot.tar\qcustomplot\qcustomplot.h"
+#include "qcustomplot.h"
 
 class MyCustomPlot : public QCustomPlot
 {
