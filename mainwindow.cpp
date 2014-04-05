@@ -35,7 +35,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_scrollArea.setGeometry(0,30,size().width(),size().height());
 
     QMenu* menuFile = ui->menuBar->addMenu(tr("&File"));
-    QAction* openFileAction = new QAction(tr("&Open"),this);
+    QAction* runExpAction = new QAction(tr("&Run"),this);
+    menuFile->addAction(runExpAction);
+    connect(runExpAction, SIGNAL(triggered()), SLOT(openRunExp()));
+    QAction* openFileAction = new QAction(tr("&Open result"),this);
     menuFile->addAction(openFileAction);
     connect(openFileAction, SIGNAL(triggered()), SLOT(openFile()));
 
@@ -92,7 +95,7 @@ void MainWindow::openFile()
 }
 
 /*
- *  Slot that open options dialog window
+ *  Slot that opens options dialog window
  * */
 void MainWindow::openOptions()
 {
@@ -118,6 +121,16 @@ void MainWindow::openOptions()
             }
         }
     }
+}
+
+/*
+ *   Slot that opens run experiment dialog window
+ * */
+void MainWindow::openRunExp()
+{
+    m_pRunExpDialog = new RunExperimentDialog();
+    m_pRunExpDialog->exec();
+    delete m_pRunExpDialog;
 }
 
 /*

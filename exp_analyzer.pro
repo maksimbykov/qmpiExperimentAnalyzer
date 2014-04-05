@@ -16,11 +16,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     qcustomplot.cpp \
     mycustomplot.cpp \
-    optionsdialog.cpp
+    optionsdialog.cpp \
+    runexperimentdialog.cpp
 
 HEADERS  += mainwindow.h \
     qcustomplot.h \
     mycustomplot.h \
-    optionsdialog.h
+    optionsdialog.h \
+    runexperimentdialog.h
 
 FORMS    += mainwindow.ui

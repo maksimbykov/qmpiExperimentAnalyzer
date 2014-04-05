@@ -7,6 +7,7 @@
 #include <QScrollArea>
 #include "mycustomplot.h"
 #include "optionsdialog.h"
+#include "runexperimentdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -36,6 +37,7 @@ class MainWindow : public QMainWindow
     experiment_map_t       m_experimentResults;
     QVector<MyCustomPlot*> m_plots;
     OptionsDialog         *m_pOptionsDialog;
+    RunExperimentDialog   *m_pRunExpDialog;
 
     /*to khow which plots should be shown*/
     QVector<bool>          m_plotsToShow;
@@ -64,6 +66,7 @@ private:
 private slots:
     void openFile();
     void openOptions();
+    void openRunExp();
 };
 
 

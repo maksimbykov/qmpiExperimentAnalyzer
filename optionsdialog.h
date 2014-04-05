@@ -8,6 +8,8 @@
 
 class OptionsDialog : public QDialog
 {
+    Q_OBJECT
+
     QVector<QCheckBox*> m_checkBoxes;
     QComboBox m_xCombo;
     QComboBox m_yCombo;
