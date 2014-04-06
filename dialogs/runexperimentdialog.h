@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QLabel>
+#include <QProcess>
 
 class RunExperimentDialog : public QDialog
 {
@@ -24,12 +25,15 @@ class RunExperimentDialog : public QDialog
     QLabel*    m_numOfProcLine;
     QSpinBox* m_numOfProcSpin;
 
+    QLineEdit* m_fullRunLine;
+
     QPushButton* m_runButton;
+    QPushButton* m_clearButton;
 
     QStringList m_runArguments;
     QString     m_mpichAppPath;
 
-    //TODO: progress bar
+    QProcess* m_experimentProc;
 public:
     RunExperimentDialog();
 
@@ -39,7 +43,10 @@ private slots:
     void openFrequency();
     void openLength();
     void numProcChanged(int);
+    void fullRunLineChanged(QString);
     void run();
+    void clear();
+    void experimentFinished(int);
 };
 
 #endif // RUNEXPERIMENTDIALOG_H

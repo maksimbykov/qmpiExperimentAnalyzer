@@ -6,8 +6,8 @@
 #include <QMap>
 #include <QScrollArea>
 #include "mycustomplot.h"
-#include "optionsdialog.h"
-#include "runexperimentdialog.h"
+#include "dialogs/optionsdialog.h"
+#include "dialogs/runexperimentdialog.h"
 
 namespace Ui {
 class MainWindow;

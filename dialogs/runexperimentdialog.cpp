@@ -1,8 +1,7 @@
 #include "runexperimentdialog.h"
 #include <QGridLayout>
 #include <QFileDialog>
-#include <QProcess>
-#include <QDebug>
+#include <QMessageBox>
 
 RunExperimentDialog::RunExperimentDialog()
     :QDialog()
@@ -10,7 +9,8 @@ RunExperimentDialog::RunExperimentDialog()
     this->setWindowTitle("Run experiment");
     resize(450,200);
 
-    m_runArguments.reserve(2);
+    //just to allocate
+    m_runArguments << " " << " ";
 
     m_mpichAppLine  = new QLineEdit(this);
     m_mpichAppLine->setPlaceholderText("Select mpich.exe path");
@@ -28,10 +28,13 @@ RunExperimentDialog::RunExperimentDialog()
     //m_freqTxtButton   = new QPushButton("Open file", this);
     //m_lengthTxtButton = new QPushButton("Open file", this);
     m_runButton       = new QPushButton("Run", this);
+    m_clearButton     = new QPushButton("Clear", this);
 
     m_numOfProcLine = new QLabel("Enter the number of processes", this);
     m_numOfProcSpin = new QSpinBox(this);
     m_numOfProcSpin->setValue(0);
+
+    m_fullRunLine = new QLineEdit(this);
 
     QGridLayout* layout = new QGridLayout();
 
@@ -47,7 +50,9 @@ RunExperimentDialog::RunExperimentDialog()
 
     layout->addWidget(m_numOfProcLine,  2,0);
     layout->addWidget(m_numOfProcSpin,  2,1);
-    layout->addWidget(m_runButton,      3,0);
+    layout->addWidget(m_fullRunLine,    3,0);
+    layout->addWidget(m_runButton,      4,0);
+    layout->addWidget(m_clearButton,    4,1);
 
     setLayout(layout);
 
@@ -57,7 +62,9 @@ RunExperimentDialog::RunExperimentDialog()
     connect(m_expAppButton,    SIGNAL(clicked()), SLOT(openExperiment()));
     //connect(m_freqTxtButton,   SIGNAL(clicked()), SLOT(openFrequency()));
     //connect(m_lengthTxtButton, SIGNAL(clicked()), SLOT(openLength()));
+    connect(m_fullRunLine,     SIGNAL(textChanged(QString)), SLOT(fullRunLineChanged(QString)));
     connect(m_runButton,       SIGNAL(clicked()), SLOT(run()));
+    connect(m_clearButton,     SIGNAL(clicked()), SLOT(clear()));
     connect(m_numOfProcSpin,   SIGNAL(valueChanged(int)), SLOT(numProcChanged(int)));
 }
 
@@ -69,7 +76,7 @@ void RunExperimentDialog::openMpich()
     {
         m_mpichAppLine->setText(fileName);
         m_mpichAppPath = fileName;
-        qDebug() << m_mpichAppPath;
+        m_fullRunLine->setText("ku"); //just to emit the signal
     }
 }
 
@@ -80,8 +87,8 @@ void RunExperimentDialog::openExperiment()
     if ( !fileName.isNull() )
     {
         m_expAppLine->setText(fileName);
-        m_runArguments.insert(1, fileName);
-        qDebug() << m_runArguments;
+        m_runArguments.replace(1, fileName);
+        m_fullRunLine->setText("ku"); //just to emit the signal
     }
 }
 
@@ -107,12 +114,49 @@ void RunExperimentDialog::openLength()
 
 void RunExperimentDialog::numProcChanged(int num)
 {
-    m_runArguments.insert(0, QString("-%1").arg(num));
+    m_runArguments.replace(0, QString("-%1").arg(num));
+
+    if ( 0 != num)
+        m_fullRunLine->setText("ku"); //just to emit the signal
+}
+
+void RunExperimentDialog::fullRunLineChanged(QString s)
+{
+    QString str(m_mpichAppPath);
+    str.append(" ");
+    str.append(m_runArguments.join(" "));
+    m_fullRunLine->setText(str);
 }
 
 void RunExperimentDialog::run()
 {
-    QProcess* proc = new QProcess(this);
+    m_experimentProc = new QProcess(this);
+    connect(m_experimentProc,  SIGNAL(finished(int)), SLOT(experimentFinished(int)));
 
-    proc->start(m_mpichAppPath, m_runArguments);
+    m_experimentProc->start(m_mpichAppPath, m_runArguments);
+}
+
+void RunExperimentDialog::clear()
+{
+    m_expAppLine->clear();
+    m_mpichAppLine->clear();
+    //m_runArguments.clear();
+    m_mpichAppPath.clear();
+    m_numOfProcSpin->clear();
+    m_numOfProcSpin->setValue(0);
+    m_fullRunLine->clear();
+}
+
+void RunExperimentDialog::experimentFinished(int exitCode)
+{
+    if ( 0 == exitCode )
+    {
+        QMessageBox::information(this, tr("Experiment result"),
+                                 tr("Experiment has finished succesfully"));
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Experiment result"),
+                              tr("Experiment has failed"));
+    }
 }

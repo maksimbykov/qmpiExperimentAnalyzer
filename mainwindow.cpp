@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_scrollArea.setGeometry(0,30,size().width(),size().height());
 
-    QMenu* menuFile = ui->menuBar->addMenu(tr("&File"));
+    QMenu* menuFile = ui->menuBar->addMenu(tr("&Experiment"));
     QAction* runExpAction = new QAction(tr("&Run"),this);
     menuFile->addAction(runExpAction);
     connect(runExpAction, SIGNAL(triggered()), SLOT(openRunExp()));
