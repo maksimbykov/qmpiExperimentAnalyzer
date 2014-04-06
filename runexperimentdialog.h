@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSpinBox>
+#include <QLabel>
 
 class RunExperimentDialog : public QDialog
 {
@@ -19,9 +21,13 @@ class RunExperimentDialog : public QDialog
     QPushButton* m_freqTxtButton;
     QPushButton* m_lengthTxtButton;
 
+    QLabel*    m_numOfProcLine;
+    QSpinBox* m_numOfProcSpin;
+
     QPushButton* m_runButton;
 
-    QString m_runCommand;
+    QStringList m_runArguments;
+    QString     m_mpichAppPath;
 
     //TODO: progress bar
 public:
@@ -32,6 +38,7 @@ private slots:
     void openExperiment();
     void openFrequency();
     void openLength();
+    void numProcChanged(int);
     void run();
 };
 
