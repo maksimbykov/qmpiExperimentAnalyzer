@@ -114,7 +114,7 @@ void RunExperimentDialog::openLength()
 
 void RunExperimentDialog::numProcChanged(int num)
 {
-    m_runArguments.replace(0, QString("-%1").arg(num));
+    m_runArguments.replace(0, QString("-n%1").arg(num));
 
     if ( 0 != num)
         m_fullRunLine->setText("ku"); //just to emit the signal
